@@ -8,10 +8,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/server.ts",
-    "start": "node src/index.js",
-    "postinstall": "tsc",
-    "watch-ts": "tsc -w",
-    "deploy": "git add . && git commit -m Heroku && git push heroku"
+    "start": "ts-node src/server.ts"
   },
   "dependencies": {
     "@types/mongoose": "^5.10.3",
@@ -23,6 +20,7 @@
     "graphql-type-json": "^0.3.2",
     "mongoose": "^5.11.10",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.1",
     "type-graphql": "^1.1.1",
     "typescript": "^4.1.3"

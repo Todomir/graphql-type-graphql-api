@@ -13,5 +13,11 @@
       "es2018",
       "esnext.asynciterable"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
