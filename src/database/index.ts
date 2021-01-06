@@ -1,10 +1,9 @@
-import dotenv from 'dotenv'
-dotenv.config()
+require('dotenv').config()
 
 import mongoose from 'mongoose'
 
 mongoose
-  .connect(process.env.MONGODB_URL, {
+  .connect(process.env.MONGODB_URL as string, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
