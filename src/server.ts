@@ -6,14 +6,14 @@ import { ApolloServer } from 'apollo-server'
 import { buildSchema } from 'type-graphql'
 
 import './database'
-import './database/schemas/UserSchema'
+import './database/schemas/TaskSchema'
 
-import UserResolver from './resolvers/UserResolver'
+import TaskResolver from './resolvers/TaskResolver'
 
 const port: string | number = process.env.PORT || 4000
 
 async function app() {
-  const schema = await buildSchema({ resolvers: [UserResolver] })
+  const schema = await buildSchema({ resolvers: [TaskResolver] })
   const server = new ApolloServer({ schema })
 
   server.listen({ port: port }, () => {

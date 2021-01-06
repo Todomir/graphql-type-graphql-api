@@ -1,20 +1,20 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { IUser } from '../database/schemas/UserSchema'
+import { ITask } from '../database/schemas/TaskSchema'
 
 @ObjectType()
-export default class User implements IUser {
+export default class Task implements ITask {
   @Field(type => ID)
   _id: any
 
   @Field()
-  name: string
+  title: string
 
   @Field()
-  email: string
+  description?: string
 
   @Field()
-  password: string
+  status: string
 
   @Field(type => Date, { nullable: true })
   createdAt?: Date
