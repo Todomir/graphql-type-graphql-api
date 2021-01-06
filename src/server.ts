@@ -15,7 +15,7 @@ async function app() {
   const schema = await buildSchema({ resolvers: [UserResolver] })
   const server = new ApolloServer({ schema })
 
-  server.listen({ port: process.env.PORT }, () => {
+  server.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(`⚡️[server]: Server is running on port ${process.env.PORT}`)
   })
 }
