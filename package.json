@@ -8,7 +8,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/server.ts",
-    "start": "ts-node src/server.ts"
+    "start": "node src/index.js",
+    "postinstall": "tsc",
+    "watch-ts": "tsc -w"
   },
   "dependencies": {
     "@types/mongoose": "^5.10.3",
