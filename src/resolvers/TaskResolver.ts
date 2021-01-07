@@ -20,7 +20,7 @@ export default class TaskController {
   @Mutation(_returns => Task, { name: 'createTask' })
   async store(
     @Arg('title') title: string,
-    @Arg('description') description: string
+    @Arg('description', { nullable: true }) description?: string
   ) {
     const task = await TaskSchema.create({
       title,
@@ -45,7 +45,7 @@ export default class TaskController {
   async update(
     @Arg('id') id: string,
     @Arg('title') title: string,
-    @Arg('description') description: string
+    @Arg('description', { nullable: true }) description: string
   ) {
     try {
       const task = await TaskSchema.findByIdAndUpdate(

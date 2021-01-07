@@ -10,7 +10,7 @@ export default class Task implements ITask {
   @Field()
   title: string
 
-  @Field()
+  @Field({ nullable: true })
   description?: string
 
   @Field()
