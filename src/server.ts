@@ -1,23 +1,27 @@
 require('dotenv').config()
-
 import 'reflect-metadata'
 
 import { ApolloServer } from 'apollo-server'
-import { buildSchema } from 'type-graphql'
+import schema from './schema'
 
 import './database'
+import './database/schemas/UserSchema'
 import './database/schemas/TaskSchema'
-
-import TaskResolver from './resolvers/TaskResolver'
 
 const port: string | number = process.env.PORT || 4000
 
 async function app() {
-  const schema = await buildSchema({ resolvers: [TaskResolver] })
-  const server = new ApolloServer({ schema })
+  const server = new ApolloServer({
+    schema,
+    context: ({ req }) => {
+      const token = req.headers.authorization
+      const context = { req, token }
+      return context
+    }
+  })
 
-  server.listen({ port: port }, () => {
-    console.log(`⚡️[server]: Server is running on port ${port}`)
+  server.listen({ port }).then(({ url }) => {
+    console.log(`⚡️[server]: Server is running on ${url}`)
   })
 }
 
