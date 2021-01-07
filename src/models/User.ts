@@ -1,8 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
-import { ITask } from '../database/schemas/TaskSchema'
 
 import { IUser } from '../database/schemas/UserSchema'
-import Task from './Task'
 
 @ObjectType()
 export default class User implements IUser {

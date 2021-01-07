@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from 'mongoose'
-import { ITask } from './TaskSchema'
 
 export interface IUser {
   _id?: any

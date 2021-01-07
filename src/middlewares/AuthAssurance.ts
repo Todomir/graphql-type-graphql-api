@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 import { verify } from 'jsonwebtoken'
 import { AuthChecker } from 'type-graphql'
 import AuthConfig from '../config/auth'

@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx, Authorized } from 'type-graphql'
+import { Resolver, Mutation, Arg } from 'type-graphql'
 import { compare } from 'bcrypt'
 
 import UserSchema from '../database/schemas/UserSchema'
