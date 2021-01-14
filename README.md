@@ -70,6 +70,14 @@ mutation {
 }
 ```
 
+Then, you can validate the token using the `validateToken` mutation. The mutation receives the token as a argument and will return true if a valid token is provided, and false otherwise.
+
+```graphql
+mutation {
+  validateToken(token: "your_jwt_token")
+}
+```
+
 ## Updating a user
 
 You can update the name and password of the user using the `updateUser` mutation, you'll need to pass the user id for the mutation to work.
