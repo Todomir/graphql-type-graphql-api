@@ -6,3 +6,8 @@ export const getUser = (token: string) => {
   const user = JSON.parse(decoded.sub)
   return user
 }
+
+export const tokenIsValid = (token: string) => {
+  const decoded: any = verify(token, AuthConfig.jwt.secret)
+  return !!decoded
+}

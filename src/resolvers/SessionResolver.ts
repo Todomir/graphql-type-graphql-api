@@ -6,6 +6,7 @@ import UserSchema from '../database/schemas/UserSchema'
 import Auth from '../models/Auth'
 import AuthConfig from '../config/auth'
 import { sign } from 'jsonwebtoken'
+import { tokenIsValid } from '../utils/decoder'
 
 interface IContext {
   session: any
@@ -40,5 +41,9 @@ export default class SessionController {
       token,
       user
     }
+  }
+  @Mutation(_returns => Boolean)
+  async validateToken(@Arg('token') token: string) {
+    return tokenIsValid(token)
   }
 }
