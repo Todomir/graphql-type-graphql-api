@@ -186,7 +186,7 @@ query {
 }
 ```
 
-## Fetching users
+## Fetching tasks
 
 You can fetch all tasks using the `tasks` query:
 
