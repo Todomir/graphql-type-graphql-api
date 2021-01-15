@@ -1,4 +1,14 @@
-import { Resolver, Query, Mutation, Arg, Authorized, Ctx } from 'type-graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Authorized,
+  Ctx,
+  InputType,
+  Field,
+  ID
+} from 'type-graphql'
 
 import { ITask } from '../database/schemas/TaskSchema'
 import TasksSchema from '../database/schemas/TaskSchema'
@@ -11,6 +21,30 @@ import Tasks from '../models/Task'
 interface IContext {
   query: any
   token?: string
+}
+
+@InputType()
+class NewTaskInput {
+  @Field(_type => ID)
+  _id?: any
+
+  @Field(_type => String)
+  title: string
+
+  @Field(_type => String)
+  description: string
+}
+
+@InputType()
+class NewTasksInput {
+  @Field(_type => [NewTaskInput])
+  todo: [ITask]
+
+  @Field(_type => [NewTaskInput])
+  doing: [ITask]
+
+  @Field(_type => [NewTaskInput])
+  done: [ITask]
 }
 
 @Resolver(Tasks)
@@ -75,33 +109,27 @@ export default class TaskController {
     return reducedTask
   }
 
-  // update a single Task
+  // update Tasks
   @Authorized()
-  @Mutation(_returns => Tasks, { name: 'updateTask' })
+  @Mutation(_returns => Tasks, { name: 'updateTasks' })
   async update(
     @Arg('id') id: string,
-    @Ctx() ctx: IContext,
-    @Arg('title', { nullable: true }) title: string,
-    @Arg('description', { nullable: true }) description: string,
-    @Arg('currentStatus') currentStatus: 'todo' | 'doing' | 'done',
-    @Arg('status') status: 'todo' | 'doing' | 'done'
+    @Arg('tasks', _type => NewTasksInput) tasks: NewTasksInput,
+    @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
     const user = getUser(token as string)
 
-    const tasks = await TasksSchema.findOne({ author: user._id })
+    await TasksSchema.updateOne(
+      { author: user._id },
+      { ...tasks, author: user._id },
+      { upsert: true }
+    )
 
-    try {
-      if (status !== currentStatus) {
-        tasks[currentStatus].pull({ _id: id })
-        tasks[status].push({ title, description })
-        const updated = await tasks.save()
+    const doc = await TasksSchema.findOne({ author: user._id })
 
-        return updated
-      }
-    } catch (error) {
-      throw error
-    }
+    console.log(doc)
+    return doc
   }
 
   // delete a single Task
