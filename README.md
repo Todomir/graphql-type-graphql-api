@@ -145,16 +145,17 @@ mutation {
 
 ## Updating a task
 
-You can update the title and description a task using the `updateTask` mutation, you'll need to pass the task id, the status you want to update to and the current status for the mutation to work.
+You can update the task document using the `updateTasks` mutation, you'll need to pass the task id and a `tasks` object with todo, doing, and done arrays containing the items for the mutation to work.
 
 ```graphql
 mutation {
-  updateTask(
+  updateTasks(
+    tasks: {
+      todo: [{ _id: "id", title: "title", description: "description" }]
+      doing: [{}]
+      done: [{}]
+    }
     id: "your_task_id"
-    status: "doing"
-    currentStatus: "todo"
-    title: "Study HTML"
-    description: "The foundation of web."
   ) {
     _id
     author {
@@ -163,17 +164,14 @@ mutation {
     todo {
       _id
       title
-      description
     }
     doing {
       _id
       title
-      description
     }
     done {
       _id
       title
-      description
     }
   }
 }
