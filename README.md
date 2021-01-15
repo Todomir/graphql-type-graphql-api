@@ -117,14 +117,27 @@ You can create a new task using the `createTask` mutation. The description field
 ```graphql
 mutation {
   createTask(
-    title: "Learn HTML, CSS and JS"
-    description: "The foundation of modern web."
+    title: "Study HTML, CSS and JS"
+    description: "The foundation of web."
   ) {
     _id
-    title
-    description
     author {
       _id
+    }
+    todo {
+      _id
+      title
+      description
+    }
+    doing {
+      _id
+      title
+      description
+    }
+    done {
+      _id
+      title
+      description
     }
   }
 }
@@ -132,15 +145,37 @@ mutation {
 
 ## Updating a task
 
-You can update the title and description a task using the `updateTask` mutation, you'll need to pass the task id for the mutation to work.
+You can update the title and description a task using the `updateTask` mutation, you'll need to pass the task id, the status you want to update to and the current status for the mutation to work.
 
 ```graphql
 mutation {
   updateTask(
     id: "your_task_id"
-    title: "Study GraphQL"
-    description: "It just makes everything easier, doesn't?"
-  )
+    status: "doing"
+    currentStatus: "todo"
+    title: "Study HTML"
+    description: "The foundation of web."
+  ) {
+    _id
+    author {
+      _id
+    }
+    todo {
+      _id
+      title
+      description
+    }
+    doing {
+      _id
+      title
+      description
+    }
+    done {
+      _id
+      title
+      description
+    }
+  }
 }
 ```
 
@@ -148,11 +183,11 @@ This mutation returns a message if the update was successful and throws an error
 
 ## Deleting a task
 
-You can delete a task from the database using the `deleteTask` mutation, you'll need to pass the task id for the mutation to work.
+You can delete a task from the database using the `deleteTask` mutation, you'll need to pass the task id and the task status for the mutation to work.
 
 ```graphql
 mutation {
-  deleteTask(id: "your_task_id")
+  deleteTask(id: "your_task_id", status: "done")
 }
 ```
 
@@ -194,11 +229,23 @@ You can fetch all tasks using the `tasks` query:
 query {
   tasks {
     _id
-    title
-    description
-    status
     author {
       _id
+    }
+    todo {
+      _id
+      title
+      description
+    }
+    doing {
+      _id
+      title
+      description
+    }
+    done {
+      _id
+      title
+      description
     }
   }
 }
@@ -208,18 +255,14 @@ This query returns the tasks in which the author is the authenticated user. In c
 
 ## Fetching a single task
 
-You can fetch a single users using the `fetchTask` query. You'll need to pass the task id for the query to work.
+You can fetch a single task using the `fetchTask` query. You'll need to pass the task id for the query to work.
 
 ```graphql
 query {
-  fetchTask(id: "your_task_id") {
+  fetchTask(id: "your_task_id", status: "todo") {
     _id
     title
     description
-    status
-    author {
-      _id
-    }
   }
 }
 ```
