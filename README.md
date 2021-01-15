@@ -145,7 +145,7 @@ mutation {
 
 ## Updating a task
 
-You can update the task document using the `updateTasks` mutation, you'll need to pass the task id and a `tasks` object with todo, doing, and done arrays containing the items for the mutation to work.
+You can update the task document using the `updateTasks` mutation, you'll need to pass a `tasks` object with todo, doing, and done arrays containing the items for the mutation to work.
 
 ```graphql
 mutation {
@@ -155,7 +155,6 @@ mutation {
       doing: [{}]
       done: [{}]
     }
-    id: "your_task_id"
   ) {
     _id
     author {
