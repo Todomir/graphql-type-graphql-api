@@ -113,7 +113,6 @@ export default class TaskController {
   @Authorized()
   @Mutation(_returns => Tasks, { name: 'updateTasks' })
   async update(
-    @Arg('id') id: string,
     @Arg('tasks', _type => NewTasksInput) tasks: NewTasksInput,
     @Ctx() ctx: IContext
   ) {
@@ -127,8 +126,6 @@ export default class TaskController {
     )
 
     const doc = await TasksSchema.findOne({ author: user._id })
-
-    console.log(doc)
     return doc
   }
 
