@@ -6,7 +6,7 @@ import UserSchema from '../database/schemas/UserSchema'
 import Auth from '../models/Auth'
 import AuthConfig from '../config/auth'
 import { sign } from 'jsonwebtoken'
-import { tokenIsValid } from '../utils/decoder'
+import { getUser } from '../utils/decoder'
 
 interface IContext {
   session: any
@@ -42,8 +42,14 @@ export default class SessionController {
       user
     }
   }
-  @Mutation(_returns => Boolean)
+  @Mutation(_returns => Auth)
   async validateToken(@Arg('token') token: string) {
-    return tokenIsValid(token)
+    const user = getUser(token as string)
+
+    if (user) {
+      return { token, user }
+    } else {
+      throw new Error('Invalid JWT')
+    }
   }
 }
