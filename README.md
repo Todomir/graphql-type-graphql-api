@@ -70,11 +70,18 @@ mutation {
 }
 ```
 
-Then, you can validate the token using the `validateToken` mutation. The mutation receives the token as a argument and will return true if a valid token is provided, and false otherwise.
+Then, you can validate the token using the `validateToken` mutation. The mutation receives the token as a argument and will return the user and the token if a valid token is provided, and throw an error otherwise.
 
 ```graphql
 mutation {
-  validateToken(token: "your_jwt_token")
+  validateToken(token: "your_jwt_token") {
+    token
+    user {
+      _id
+      name
+      email
+    }
+  }
 }
 ```
 
