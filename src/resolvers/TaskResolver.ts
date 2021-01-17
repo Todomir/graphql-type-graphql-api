@@ -14,6 +14,8 @@ import { ITask } from '../database/schemas/TaskSchema'
 import TasksSchema from '../database/schemas/TaskSchema'
 import GraphQLJSON from 'graphql-type-json'
 
+import mongoose from 'mongoose'
+
 import { getUser } from '../utils/decoder'
 import { Task } from '../models/Task'
 import Tasks from '../models/Task'
@@ -63,7 +65,7 @@ export default class TaskController {
 
   // create a new Task
   @Authorized()
-  @Mutation(_returns => Tasks, { name: 'createTask' })
+  @Mutation(_returns => Task, { name: 'createTask' })
   async store(
     @Arg('title') title: string,
     @Ctx() ctx: IContext,
@@ -75,15 +77,17 @@ export default class TaskController {
     const taskDoc = await TasksSchema.findOne({ author: user._id })
 
     if (!taskDoc) {
-      const task = await TasksSchema.create({
+      const item = { _id: mongoose.Types.ObjectId(), title, description }
+      await TasksSchema.create({
         author: user._id,
         todo: [{ title, description }]
       })
-      return task
+      return item
     } else {
-      taskDoc.todo.push({ title, description })
-      const updated = await taskDoc.save()
-      return updated
+      const item = { _id: mongoose.Types.ObjectId(), title, description }
+      taskDoc.todo.push(item)
+      await taskDoc.save()
+      return item
     }
   }
 
