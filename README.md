@@ -87,7 +87,7 @@ mutation {
 
 ## Updating a user
 
-You can update the name and password of the user using the `updateUser` mutation, you'll need to pass the user id for the mutation to work.
+You can update the name and password of the user using the `updateUser` mutation, you'll need to pass the user id, or either an new name or new password for the mutation to work.
 
 ```graphql
 mutation {
