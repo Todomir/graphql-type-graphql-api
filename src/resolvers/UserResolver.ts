@@ -50,18 +50,27 @@ export default class UserController {
   @Mutation(_returns => User, { name: 'updateUser' })
   async update(
     @Arg('id') id: string,
-    @Arg('name') name: string,
-    @Arg('password') password: string
+    @Arg('name', { nullable: true }) name: string,
+    @Arg('password', { nullable: true }) password: string
   ) {
-    try {
-      const user = await UserSchema.findByIdAndUpdate(
-        id,
-        { name, password },
-        { new: true }
-      )
+    if (!name && !password) {
+      throw new Error('Please provide either an email or password to update')
+    }
 
+    try {
+      const user = await UserSchema.findById(id)
       if (!user) throw new Error('❌ | User not found.')
-      return user
+
+      let pass = user.password
+      if (password) {
+        pass = await hash(password, 10)
+      }
+      user.name = name || user.name
+      user.password = pass || user.password
+
+      const updated = await user.save()
+
+      return updated
     } catch (error) {
       throw error
     }

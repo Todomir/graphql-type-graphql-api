@@ -22,13 +22,13 @@ export default class SessionController {
     // check if user exists
     const user = await UserSchema.findOne({ email })
     if (!user) {
-      throw new Error('❌ | Incorrect e-mail/password combination')
+      throw new Error('Incorrect e-mail/password combination')
     }
 
     // check if passwords match
     const passwordMatched = await compare(password, user.password)
     if (!passwordMatched) {
-      throw new Error('❌ | Incorrect e-mail/password combination')
+      throw new Error('Incorrect e-mail/password combination')
     }
 
     const { secret, expiresIn } = AuthConfig.jwt

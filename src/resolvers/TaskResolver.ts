@@ -107,9 +107,7 @@ export default class TaskController {
 
     const reducedTask = task.reduce((acc: any, {}) => ({ ...acc }))
 
-    console.log(reducedTask)
-
-    if (task.length < 0) throw new Error('❌ | Task not found.')
+    if (task.length < 0) throw new Error('Task not found.')
     return reducedTask
   }
 
