@@ -5,6 +5,7 @@ export interface IUser {
   name: string
   email: string
   password: string
+  emailConfirmed: boolean
   createdAt?: Date
   updatedAt?: Date
 }
@@ -21,7 +22,8 @@ const UserSchema = new Schema<IUserDocument>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    emailConfirmed: { type: Boolean, required: true }
   },
   { timestamps: true, toJSON: { virtuals: true } }
 )

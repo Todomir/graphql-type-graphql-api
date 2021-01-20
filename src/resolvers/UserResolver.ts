@@ -14,6 +14,7 @@ export default class UserController {
       '_id',
       'name',
       'email',
+      'emailConfirmed',
       'createdAt',
       'updatedAt'
     ])

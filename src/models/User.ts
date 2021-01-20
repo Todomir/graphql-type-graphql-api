@@ -16,6 +16,9 @@ export default class User implements IUser {
   @Field()
   password: string
 
+  @Field()
+  emailConfirmed: boolean
+
   @Field(_type => Date, { nullable: true })
   createdAt?: Date
 
