@@ -128,8 +128,24 @@ mutation {
     description: "The foundation of web."
   ) {
     _id
-    title
-    description
+    author {
+      _id
+    }
+    todo {
+      _id
+      title
+      description
+    }
+    doing {
+      _id
+      title
+      description
+    }
+    done {
+      _id
+      title
+      description
+    }
   }
 }
 ```

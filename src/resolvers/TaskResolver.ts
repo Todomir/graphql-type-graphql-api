@@ -16,7 +16,7 @@ import GraphQLJSON from 'graphql-type-json'
 
 import mongoose from 'mongoose'
 
-import { tokenIsValid } from '../utils/decoder'
+import { getUser } from '../utils/decoder'
 import { Task } from '../models/Task'
 import Tasks from '../models/Task'
 
@@ -56,9 +56,9 @@ export default class TaskController {
   @Query(_returns => [Tasks], { name: 'tasks' })
   async index(@Ctx() ctx: IContext) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const uid = tokenIsValid(token as string)
+    const user = getUser(token as string)
 
-    const tasks = await TasksSchema.find({ author: uid })
+    const tasks = await TasksSchema.find({ author: user._id })
     console.log(tasks)
     return tasks
   }
@@ -72,14 +72,14 @@ export default class TaskController {
     @Arg('description', { nullable: true }) description?: string
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const uid = tokenIsValid(token as string)
+    const user = getUser(token as string)
 
-    const taskDoc = await TasksSchema.findOne({ author: uid })
+    const taskDoc = await TasksSchema.findOne({ author: user._id })
 
     if (!taskDoc) {
       const item = { _id: mongoose.Types.ObjectId(), title, description }
       await TasksSchema.create({
-        author: uid,
+        author: user._id,
         todo: [{ title, description }]
       })
       return item
@@ -100,9 +100,9 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const uid = tokenIsValid(token as string)
+    const user = getUser(token as string)
 
-    const tasks = await TasksSchema.findOne({ author: uid })
+    const tasks = await TasksSchema.findOne({ author: user._id })
     const task = tasks[status].filter((task: ITask) => task._id == id)
 
     const reducedTask = task.reduce((acc: any, {}) => ({ ...acc }))
@@ -119,15 +119,15 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const uid = tokenIsValid(token as string)
+    const user = getUser(token as string)
 
     await TasksSchema.updateOne(
-      { author: uid },
-      { ...tasks, author: uid },
+      { author: user._id },
+      { ...tasks, author: user._id },
       { upsert: true }
     )
 
-    const doc = await TasksSchema.findOne({ author: uid })
+    const doc = await TasksSchema.findOne({ author: user._id })
     return doc
   }
 
@@ -140,14 +140,14 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const uid = tokenIsValid(token as string)
+    const user = getUser(token as string)
     try {
-      const tasks = await TasksSchema.findOne({ author: uid })
+      const tasks = await TasksSchema.findOne({ author: user._id })
 
       tasks[status].pull({ _id: id })
       await tasks.save()
 
-      return { message: '✅ | Task deleted successfully!' }
+      return { message: 'Task deleted successfully!' }
     } catch (error) {
       throw error
     }

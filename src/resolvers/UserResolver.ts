@@ -42,7 +42,7 @@ export default class UserController {
   async show(@Arg('id') id: string) {
     const user = await UserSchema.findById(id)
 
-    if (!user) throw new Error('User not found.')
+    if (!user) throw new Error('❌ | User not found.')
     return user
   }
 
@@ -59,7 +59,7 @@ export default class UserController {
 
     try {
       const user = await UserSchema.findById(id)
-      if (!user) throw new Error('User not found.')
+      if (!user) throw new Error('❌ | User not found.')
 
       let pass = user.password
       if (password) {
