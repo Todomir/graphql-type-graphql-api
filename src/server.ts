@@ -6,6 +6,8 @@ import depthLimit from 'graphql-depth-limit'
 
 import schema from './schema'
 
+import cors from 'cors'
+
 import express from 'express'
 import { verify } from 'jsonwebtoken'
 
@@ -20,6 +22,23 @@ const port: string | number = process.env.PORT || 4000
 
 async function app() {
   const app = express()
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          process.env.CLIENT_DEV_URL,
+          process.env.CLIENT_PROD_URL
+        ]
+        if (!origin) return callback(null, true)
+        if (allowedOrigins.indexOf(origin) === -1) {
+          var msg =
+            'The CORS policy for this site does not allow access from the specified Origin.'
+          return callback(new Error(msg), false)
+        }
+        return callback(null, true)
+      }
+    })
+  )
   const apolloServer = new ApolloServer({
     schema,
     validationRules: [depthLimit(10)],
@@ -31,7 +50,7 @@ async function app() {
     }
   })
 
-  apolloServer.applyMiddleware({ app, cors: false })
+  apolloServer.applyMiddleware({ app })
 
   app.get('/confirmation/:token', async (req, res) => {
     try {
