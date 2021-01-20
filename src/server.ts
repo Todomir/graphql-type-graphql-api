@@ -31,7 +31,7 @@ async function app() {
     }
   })
 
-  apolloServer.applyMiddleware({ app, cors: true })
+  apolloServer.applyMiddleware({ app, cors: false })
 
   app.get('/confirmation/:token', async (req, res) => {
     try {
