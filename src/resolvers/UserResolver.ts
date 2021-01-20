@@ -4,6 +4,7 @@ import { hash } from 'bcrypt'
 import User from '../models/User'
 import UserSchema from '../database/schemas/UserSchema'
 import GraphQLJSON from 'graphql-type-json'
+import sendEmail from '../config/email/email.send'
 
 @Resolver(User)
 export default class UserController {
@@ -32,9 +33,16 @@ export default class UserController {
     const user = await UserSchema.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      emailConfirmed: false
     })
 
+    try {
+      await sendEmail(user.email, user._id, user.name)
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
     return user
   }
 

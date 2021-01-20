@@ -33,7 +33,7 @@ export default class SessionController {
 
     const { secret, expiresIn } = AuthConfig.jwt
     const token = sign({}, secret, {
-      subject: JSON.stringify(user),
+      subject: JSON.stringify(user._id),
       expiresIn
     })
 
