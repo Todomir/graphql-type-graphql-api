@@ -1,13 +1,8 @@
 import { verify } from 'jsonwebtoken'
 import AuthConfig from '../config/auth'
 
-export const getUser = (token: string) => {
+export const getId = (token: string) => {
   const decoded: any = verify(token, AuthConfig.jwt.secret)
-  const user = JSON.parse(decoded.sub)
-  return user
-}
-
-export const tokenIsValid = (token: string) => {
-  const decoded: any = verify(token, AuthConfig.jwt.secret)
-  return !!decoded
+  const id = JSON.parse(decoded.sub)
+  return id
 }

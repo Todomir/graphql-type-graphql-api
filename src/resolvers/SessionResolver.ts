@@ -6,7 +6,7 @@ import UserSchema from '../database/schemas/UserSchema'
 import Auth from '../models/Auth'
 import AuthConfig from '../config/auth'
 import { sign } from 'jsonwebtoken'
-import { getUser } from '../utils/decoder'
+import { getId } from '../utils/decoder'
 
 interface IContext {
   session: any
@@ -44,7 +44,8 @@ export default class SessionController {
   }
   @Mutation(_returns => Auth)
   async validateToken(@Arg('token') token: string) {
-    const user = getUser(token as string)
+    const id = getId(token as string)
+    const user = await UserSchema.findById(id)
 
     if (user) {
       return { token, user }

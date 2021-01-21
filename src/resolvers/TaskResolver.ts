@@ -16,7 +16,7 @@ import GraphQLJSON from 'graphql-type-json'
 
 import mongoose from 'mongoose'
 
-import { getUser } from '../utils/decoder'
+import { getId } from '../utils/decoder'
 import { Task } from '../models/Task'
 import Tasks from '../models/Task'
 
@@ -56,9 +56,9 @@ export default class TaskController {
   @Query(_returns => [Tasks], { name: 'tasks' })
   async index(@Ctx() ctx: IContext) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const user = getUser(token as string)
+    const uid = getId(token as string)
 
-    const tasks = await TasksSchema.find({ author: user._id })
+    const tasks = await TasksSchema.find({ author: uid })
     console.log(tasks)
     return tasks
   }
@@ -72,14 +72,14 @@ export default class TaskController {
     @Arg('description', { nullable: true }) description?: string
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const user = getUser(token as string)
+    const uid = getId(token as string)
 
-    const taskDoc = await TasksSchema.findOne({ author: user._id })
+    const taskDoc = await TasksSchema.findOne({ author: uid })
 
     if (!taskDoc) {
       const item = { _id: mongoose.Types.ObjectId(), title, description }
       await TasksSchema.create({
-        author: user._id,
+        author: uid,
         todo: [{ title, description }]
       })
       return item
@@ -100,9 +100,9 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const user = getUser(token as string)
+    const uid = getId(token as string)
 
-    const tasks = await TasksSchema.findOne({ author: user._id })
+    const tasks = await TasksSchema.findOne({ author: uid })
     const task = tasks[status].filter((task: ITask) => task._id == id)
 
     const reducedTask = task.reduce((acc: any, {}) => ({ ...acc }))
@@ -119,15 +119,15 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const user = getUser(token as string)
+    const uid = getId(token as string)
 
     await TasksSchema.updateOne(
-      { author: user._id },
-      { ...tasks, author: user._id },
+      { author: uid },
+      { ...tasks, author: uid },
       { upsert: true }
     )
 
-    const doc = await TasksSchema.findOne({ author: user._id })
+    const doc = await TasksSchema.findOne({ author: uid })
     return doc
   }
 
@@ -140,9 +140,9 @@ export default class TaskController {
     @Ctx() ctx: IContext
   ) {
     const token = ctx.token?.replace(/^Bearer\s/, '')
-    const user = getUser(token as string)
+    const uid = getId(token as string)
     try {
-      const tasks = await TasksSchema.findOne({ author: user._id })
+      const tasks = await TasksSchema.findOne({ author: uid })
 
       tasks[status].pull({ _id: id })
       await tasks.save()
