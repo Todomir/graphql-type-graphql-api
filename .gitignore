@@ -1,7 +1,7 @@
 #dependencies
 node_modules
 
-# lockfiles
+# logs
 yarn-error.log
 
 # enviroment variables
